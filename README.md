@@ -83,6 +83,49 @@ npx -y @smithery/cli install @ZubeidHendricks/youtube --client claude
 Set the following environment variables:
 * `YOUTUBE_API_KEY`: Your YouTube Data API key (required)
 * `YOUTUBE_TRANSCRIPT_LANG`: Default language for transcripts (optional, defaults to 'en')
+
+### Using with Docker
+
+The YouTube MCP Server is available as a Docker image from GitHub Container Registry:
+
+```bash
+# Pull the latest image
+docker pull ghcr.io/jordanburke/youtube-mcp-server:latest
+
+# Run with environment variables
+docker run --rm \
+  -e YOUTUBE_API_KEY="your_youtube_api_key_here" \
+  -e YOUTUBE_TRANSCRIPT_LANG="en" \
+  ghcr.io/jordanburke/youtube-mcp-server:latest
+
+# Run with custom MCP configuration
+docker run --rm \
+  -e YOUTUBE_API_KEY="your_youtube_api_key_here" \
+  -v /path/to/your/config:/config \
+  ghcr.io/jordanburke/youtube-mcp-server:latest
+```
+
+For Claude Desktop configuration with Docker:
+
+```json
+{
+  "mcpServers": {
+    "youtube": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "ghcr.io/jordanburke/youtube-mcp-server:latest"
+      ],
+      "env": {
+        "YOUTUBE_API_KEY": "your_youtube_api_key_here"
+      }
+    }
+  }
+}
+```
+
 ### Using with VS Code
 
 For one-click installation, click one of the install buttons below:
