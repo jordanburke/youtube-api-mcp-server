@@ -10,7 +10,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci
+RUN npm install
 
 # Copy source code
 COPY . .
@@ -29,7 +29,7 @@ WORKDIR /app
 
 # Copy built application and production dependencies
 COPY --from=builder --chown=nodejs:nodejs /app/package*.json ./
-RUN npm ci --only=production && npm cache clean --force
+RUN npm install --only=production && npm cache clean --force
 
 COPY --from=builder --chown=nodejs:nodejs /app/dist ./dist
 
