@@ -21,6 +21,9 @@ RUN npm run build
 # Runtime stage
 FROM node:20-alpine
 
+# Install curl for health checks
+RUN apk add --no-cache curl
+
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S nodejs -u 1001
@@ -41,9 +44,16 @@ USER nodejs
 
 # Set environment variable hints
 ENV NODE_ENV=production
+# Default to HTTP transport on port 3000
+ENV MCP_TRANSPORT=http
+ENV MCP_HTTP_PORT=3000
+ENV MCP_HTTP_HOST=0.0.0.0
 
-# Health check (optional - checks if the process is running)
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+# Expose HTTP port
+EXPOSE 3000
+
+# Health check - test if the server is running
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
     CMD node -e "process.exit(0)" || exit 1
 
 # Start the MCP server

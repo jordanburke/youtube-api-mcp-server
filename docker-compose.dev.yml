@@ -1,0 +1,54 @@
+version: '3.8'
+
+# Development/Testing Docker Compose Configuration
+# This is useful for testing the MCP server locally
+
+services:
+  # Build from local Dockerfile for development
+  youtube-api-mcp-server-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: youtube-api-mcp-server-dev
+    environment:
+      # Required: Your YouTube Data API key
+      YOUTUBE_API_KEY: ${YOUTUBE_API_KEY}
+      # Optional: Default language for transcripts (defaults to 'en')
+      YOUTUBE_TRANSCRIPT_LANG: ${YOUTUBE_TRANSCRIPT_LANG:-en}
+      # Development environment
+      NODE_ENV: development
+    # MCP servers communicate via stdio
+    stdin_open: true
+    tty: true
+    # Mount source code for development
+    volumes:
+      - ./src:/app/src
+      - ./dist:/app/dist
+    # Override command for development
+    command: npm run dev
+
+  # Example: Test the MCP server with a simple client
+  test-mcp-communication:
+    image: node:20-alpine
+    container_name: mcp-test-client
+    stdin_open: true
+    tty: true
+    working_dir: /test
+    volumes:
+      - ./test:/test
+    environment:
+      YOUTUBE_API_KEY: ${YOUTUBE_API_KEY}
+    command: |
+      sh -c 'cat <<EOF
+      To test the MCP server, you can send JSON-RPC messages.
+      
+      Example initialization:
+      {"jsonrpc":"2.0","method":"initialize","params":{"capabilities":{}},"id":1}
+      
+      Example tool list:
+      {"jsonrpc":"2.0","method":"tools/list","params":{},"id":2}
+      
+      Example tool call:
+      {"jsonrpc":"2.0","method":"tools/call","params":{"name":"videos_searchVideos","arguments":{"query":"nodejs tutorial","maxResults":5}},"id":3}
+      EOF
+      && sh'

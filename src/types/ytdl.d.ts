@@ -1,22 +1,22 @@
-declare module 'ytdl-core' {
-  import { Readable } from 'stream';
+declare module "ytdl-core" {
+  import { Readable } from "stream"
 
   interface YtdlOptions {
-    quality?: string;
+    quality?: string
   }
 
-  function ytdl(url: string, options?: YtdlOptions): Readable;
-  
+  function ytdl(url: string, options?: YtdlOptions): Readable
+
   namespace ytdl {
     export interface VideoInfo {
       videoDetails: {
-        title: string;
+        title: string
         // Add other properties as needed
-      };
+      }
     }
-    
-    export function getInfo(url: string): Promise<VideoInfo>;
+
+    export function getInfo(url: string): Promise<VideoInfo>
   }
 
-  export = ytdl;
+  export = ytdl
 }

@@ -3,7 +3,7 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Overview
-YouTube MCP Server is a Model Context Protocol (MCP) server implementation that enables AI language models to interact with YouTube content through a standardized interface. It provides comprehensive access to YouTube's video, channel, playlist, and transcript data via the YouTube Data API v3.
+YouTube API MCP Server is a Model Context Protocol (MCP) server implementation that enables AI language models to interact with YouTube content through a standardized interface. It provides comprehensive access to YouTube's video, channel, playlist, and transcript data via the YouTube Data API v3. The server supports both stdio and HTTP transports using FastMCP.
 
 ## Development Commands
 
@@ -57,9 +57,11 @@ The server exposes tools following the naming convention `{resource}_{action}`:
 
 ### Key Dependencies
 - `@modelcontextprotocol/sdk` - MCP protocol implementation
+- `fastmcp` - FastMCP framework for multi-transport support
 - `googleapis` - Official Google APIs client (YouTube Data API v3)
 - `ytdl-core` - YouTube video information extraction
 - `youtube-transcript` - Transcript/caption retrieval
+- `zod` - Schema validation for tool parameters
 
 ## Configuration Requirements
 
@@ -97,13 +99,25 @@ private initialize() {
 - Custom type definitions in `src/types/` for external libraries
 - Parameter types defined in `src/types.ts`
 
+## Transport Support
+
+### FastMCP Integration
+The server uses FastMCP to support multiple transport types:
+- **stdio** (default): Traditional MCP communication via standard input/output
+- **http**: HTTP streaming for remote access and web integrations
+
+Transport is configured via environment variables:
+- `MCP_TRANSPORT`: Set to "stdio" or "http"
+- `MCP_HTTP_PORT`: Port for HTTP server (default: 3000)
+- `MCP_HTTP_HOST`: Host for HTTP server (default: localhost)
+
 ## MCP Integration
-The server uses StdioServerTransport for communication with MCP clients like Claude Desktop. Configuration example:
+Configuration example for Claude Desktop (stdio transport):
 ```json
 {
   "mcpServers": {
-    "zubeid-youtube-mcp-server": {
-      "command": "zubeid-youtube-mcp-server",
+    "youtube-api-mcp-server": {
+      "command": "youtube-api-mcp-server",
       "env": {
         "YOUTUBE_API_KEY": "your_api_key"
       }

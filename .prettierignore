@@ -1,0 +1,43 @@
+# Ignore built files
+dist/
+build/
+*.min.js
+*.bundle.js
+
+# Ignore node modules
+node_modules/
+
+# Ignore coverage reports
+coverage/
+.nyc_output/
+
+# Ignore environment files
+.env
+.env.*
+
+# Ignore logs
+*.log
+logs/
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore package lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Ignore git files
+.git/
+.gitignore
+
+# Ignore config files that shouldn't be formatted
+tsconfig.json
+.eslintrc*

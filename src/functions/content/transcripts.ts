@@ -1,6 +1,6 @@
 // @ts-ignore - We know the SDK exists
-import { MCPFunction, MCPFunctionGroup } from "@modelcontextprotocol/sdk";
-import { YoutubeTranscript } from "youtube-transcript";
+import { MCPFunction, MCPFunctionGroup } from "@modelcontextprotocol/sdk"
+import { YoutubeTranscript } from "youtube-transcript"
 
 export class TranscriptManagement implements MCPFunctionGroup {
   constructor() {
@@ -9,76 +9,74 @@ export class TranscriptManagement implements MCPFunctionGroup {
 
   // @ts-ignore - We know the SDK exists
   @MCPFunction({
-    description: 'Get the transcript of a YouTube video',
+    description: "Get the transcript of a YouTube video",
     parameters: {
-      type: 'object',
+      type: "object",
       properties: {
-        videoId: { type: 'string' },
-        language: { type: 'string' }
+        videoId: { type: "string" },
+        language: { type: "string" },
       },
-      required: ['videoId']
-    }
+      required: ["videoId"],
+    },
   })
-  async getTranscript({ 
-    videoId, 
-    language = process.env.YOUTUBE_TRANSCRIPT_LANG || 'en' 
-  }: { 
-    videoId: string, 
-    language?: string 
+  async getTranscript({
+    videoId,
+    language = process.env.YOUTUBE_TRANSCRIPT_LANG || "en",
+  }: {
+    videoId: string
+    language?: string
   }): Promise<any> {
     try {
       // @ts-ignore - Library may not match types exactly
-      const transcript = await YoutubeTranscript.fetchTranscript(videoId);
-      
+      const transcript = await YoutubeTranscript.fetchTranscript(videoId)
+
       return {
         videoId,
         language,
-        transcript
-      };
+        transcript,
+      }
     } catch (error) {
-      throw new Error(`Failed to get transcript: ${error instanceof Error ? error.message : String(error)}`);
+      throw new Error(`Failed to get transcript: ${error instanceof Error ? error.message : String(error)}`)
     }
   }
 
   // @ts-ignore - We know the SDK exists
   @MCPFunction({
-    description: 'Search within a transcript',
+    description: "Search within a transcript",
     parameters: {
-      type: 'object',
+      type: "object",
       properties: {
-        videoId: { type: 'string' },
-        query: { type: 'string' },
-        language: { type: 'string' }
+        videoId: { type: "string" },
+        query: { type: "string" },
+        language: { type: "string" },
       },
-      required: ['videoId', 'query']
-    }
+      required: ["videoId", "query"],
+    },
   })
-  async searchTranscript({ 
-    videoId, 
+  async searchTranscript({
+    videoId,
     query,
-    language = process.env.YOUTUBE_TRANSCRIPT_LANG || 'en' 
-  }: { 
-    videoId: string,
-    query: string, 
-    language?: string 
+    language = process.env.YOUTUBE_TRANSCRIPT_LANG || "en",
+  }: {
+    videoId: string
+    query: string
+    language?: string
   }): Promise<any> {
     try {
       // @ts-ignore - Library may not match types exactly
-      const transcript = await YoutubeTranscript.fetchTranscript(videoId);
-      
+      const transcript = await YoutubeTranscript.fetchTranscript(videoId)
+
       // Search through transcript for the query
-      const matches = transcript.filter(item => 
-        item.text.toLowerCase().includes(query.toLowerCase())
-      );
-      
+      const matches = transcript.filter((item) => item.text.toLowerCase().includes(query.toLowerCase()))
+
       return {
         videoId,
         query,
         matches,
-        totalMatches: matches.length
-      };
+        totalMatches: matches.length,
+      }
     } catch (error) {
-      throw new Error(`Failed to search transcript: ${error instanceof Error ? error.message : String(error)}`);
+      throw new Error(`Failed to search transcript: ${error instanceof Error ? error.message : String(error)}`)
     }
   }
 }
