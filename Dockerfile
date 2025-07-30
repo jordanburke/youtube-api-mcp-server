@@ -7,16 +7,19 @@ RUN apk add --no-cache python3 make g++
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
+COPY package*.json pnpm-lock.yaml ./
+
+# Enable corepack for pnpm
+RUN corepack enable
 
 # Install dependencies
-RUN npm install
+RUN pnpm install
 
 # Copy source code
 COPY . .
 
 # Build TypeScript
-RUN npm run build
+RUN pnpm run build
 
 # Runtime stage
 FROM node:20-alpine
@@ -30,9 +33,12 @@ RUN addgroup -g 1001 -S nodejs && \
 
 WORKDIR /app
 
+# Enable corepack for pnpm
+RUN corepack enable
+
 # Copy built application and production dependencies
-COPY --from=builder --chown=nodejs:nodejs /app/package*.json ./
-RUN npm install --only=production && npm cache clean --force
+COPY --from=builder --chown=nodejs:nodejs /app/package*.json /app/pnpm-lock.yaml ./
+RUN pnpm install --only=production && pnpm store prune
 
 COPY --from=builder --chown=nodejs:nodejs /app/dist ./dist
 

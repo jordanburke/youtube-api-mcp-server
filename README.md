@@ -35,7 +35,7 @@ A Model Context Protocol (MCP) server implementation for the YouTube API, enabli
 
 1. Install the package:
 ```bash
-npm install -g youtube-api-mcp-server
+pnpm add -g youtube-api-mcp-server
 ```
 
 2. Add to your Claude Desktop configuration (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS or `%APPDATA%\Claude\claude_desktop_config.json` on Windows):
@@ -321,16 +321,16 @@ const playlist = await youtube.playlists.getPlaylist({
 
 ```bash
 # Install dependencies
-npm install
-
-# Run tests
-npm test
+pnpm install
 
 # Build
-npm run build
+pnpm run build
 
 # Lint
-npm run lint
+pnpm run lint
+
+# Format code
+pnpm run format
 ```
 
 ## Contributing
