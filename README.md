@@ -1,7 +1,8 @@
 # YouTube API MCP Server
 [![smithery badge](https://smithery.ai/badge/@jordanburke/youtube-api)](https://smithery.ai/server/@jordanburke/youtube-api)
+![CI Status](https://github.com/jordanburke/youtube-api-mcp-server/actions/workflows/ci.yml/badge.svg)
 
-A Model Context Protocol (MCP) server implementation for the YouTube API, enabling AI language models to interact with YouTube content through a standardized interface. Supports both stdio and HTTP transports.
+A Model Context Protocol (MCP) server implementation for the YouTube API, enabling AI language models to interact with YouTube content through a standardized interface. Supports both stdio and HTTP transports using FastMCP.
 
 ## Features
 
@@ -31,29 +32,13 @@ A Model Context Protocol (MCP) server implementation for the YouTube API, enabli
 
 ## Installation
 
-### Quick Setup for Claude Desktop
+### Using NPX (Recommended)
 
-1. Install the package:
+The easiest way to use the YouTube API MCP Server is with npx:
+
 ```bash
-pnpm add -g youtube-api-mcp-server
+npx youtube-api-mcp-server
 ```
-
-2. Add to your Claude Desktop configuration (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS or `%APPDATA%\Claude\claude_desktop_config.json` on Windows):
-
-```json
-{
-  "mcpServers": {
-    "youtube-api-mcp-server": {
-      "command": "youtube-api-mcp-server",
-      "env": {
-        "YOUTUBE_API_KEY": "your_youtube_api_key_here"
-      }
-    }
-  }
-}
-```
-
-### Alternative: Using NPX (No Installation Required)
 
 Add this to your Claude Desktop configuration:
 
@@ -62,7 +47,34 @@ Add this to your Claude Desktop configuration:
   "mcpServers": {
     "youtube": {
       "command": "npx",
-      "args": ["-y", "youtube-api-mcp-server"],
+      "args": ["youtube-api-mcp-server"],
+      "env": {
+        "YOUTUBE_API_KEY": "your_youtube_api_key_here"
+      }
+    }
+  }
+}
+```
+
+### Global Installation
+
+Install globally for direct command access:
+
+```bash
+# Using npm
+npm install -g youtube-api-mcp-server
+
+# Using pnpm
+pnpm add -g youtube-api-mcp-server
+```
+
+Then add to your Claude Desktop configuration:
+
+```json
+{
+  "mcpServers": {
+    "youtube-api-mcp-server": {
+      "command": "youtube-api-mcp-server",
       "env": {
         "YOUTUBE_API_KEY": "your_youtube_api_key_here"
       }
@@ -319,22 +331,63 @@ const playlist = await youtube.playlists.getPlaylist({
 
 ## Development
 
+This project uses modern tooling for a streamlined development experience:
+
+- **Build System**: [tsup](https://tsup.egoist.dev/) for fast, zero-config TypeScript builds
+- **Package Manager**: [pnpm](https://pnpm.io/) for efficient dependency management
+- **Transport Layer**: [FastMCP](https://github.com/eirikhm/fastmcp) for multi-transport support (stdio/HTTP)
+
+### Commands
+
 ```bash
 # Install dependencies
 pnpm install
 
-# Build
-pnpm run build
+# Build the project
+pnpm build
 
-# Lint
-pnpm run lint
+# Development mode with auto-rebuild
+pnpm dev
+
+# Run with HTTP transport in development
+pnpm dev:http
+
+# Type checking
+pnpm typecheck
+
+# Linting
+pnpm lint
+pnpm lint:fix
 
 # Format code
-pnpm run format
+pnpm format
+pnpm format:check
+
+# Full build verification
+pnpm build:check
 ```
+
+### CI/CD
+
+This project uses GitHub Actions for continuous integration:
+
+- **Linting & Formatting**: Ensures code quality and consistent style
+- **Type Checking**: Validates TypeScript types without emitting files
+- **Build Matrix**: Tests against Node.js 18, 20, and 22
+- **Publish Test**: Verifies the package is ready for npm publishing
+
+The CI workflow runs on:
+- Push to `main` or `develop` branches
+- All pull requests to `main`
 
 ## Contributing
 See CONTRIBUTING.md for information about contributing to this repository.
+
+## Author
+
+**Jordan Burke** <jordan.burke@gmail.com>
+
+Originally created by Zubeid Hendricks.
 
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
