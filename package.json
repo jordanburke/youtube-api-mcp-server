@@ -58,7 +58,7 @@
     "claude",
     "anthropic"
   ],
-  "author": "Zubeid Hendricks",
+  "author": "Jordan Burke <jordan.burke@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
